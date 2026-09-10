@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>METAR Trainer — ICEA</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<header class="top">
+  <div><b>METAR TRAINER</b><span> — Simulador de treinamento meteorológico</span></div>
+  <div class="badge">GITHUB PAGES • JAVASCRIPT • MODO ALUNO</div>
+</header>
+<main>
+<section class="grid">
+<article class="panel station-panel">
+<div class="title">PAINEL DE INFORMAÇÕES METEOROLÓGICAS</div>
+<div class="sub">Cenário randômico — observe os dados brutos e confeccione o METAR</div>
+<div class="dashboard">
+<div class="instrument wind"><h3>VENTO À SUPERFÍCIE</h3><div class="compass">
+<div class="degree d0">000</div><div class="degree d30">030</div><div class="degree d60">060</div><div class="degree d90">090</div><div class="degree d120">120</div><div class="degree d150">150</div><div class="degree d180">180</div><div class="degree d210">210</div><div class="degree d240">240</div><div class="degree d270">270</div><div class="degree d300">300</div><div class="degree d330">330</div>
+<div class="cardinal n">N</div><div class="cardinal e">E</div><div class="cardinal s">S</div><div class="cardinal w">W</div><div class="needle" id="needle"></div><div class="hub"></div></div>
+<div class="readout"><b id="windRead">---</b></div><div class="variable-read" id="variableRead">Direção predominante</div></div>
+<div class="cards">
+<div class="metric"><span>AERÓDROMO</span><b id="airport">---</b></div><div class="metric"><span>DATA/HORA</span><b id="datetime">------Z</b></div>
+<div class="metric"><span>VISIBILIDADE</span><b id="visibility">---</b><small> m</small></div><div class="metric"><span>TEMPO PRESENTE</span><b id="weather">---</b></div>
+<div class="metric"><span>TEMPERATURA</span><b id="temp">---</b><small> °C</small></div><div class="metric"><span>PONTO DE ORVALHO</span><b id="dew">---</b><small> °C</small></div>
+<div class="metric"><span>QNH</span><b id="qnh">---</b><small> hPa</small></div><div class="metric"><span>QNE</span><b id="qne">1013.25</b><small> hPa</small></div>
+<div class="metric"><span>QFE</span><b id="qfe">---</b><small> hPa</small></div><div class="metric"><span>ELEVAÇÃO</span><b id="elevation">---</b><small> ft</small></div>
+</div></div>
+<div class="cloud-panel"><div class="cloud-header">NUVENS — OBSERVAÇÃO BRUTA PARA INTERPRETAÇÃO DO ALUNO</div>
+<div class="cloud-help"><b>Não há FEW, SCT, BKN ou OVC nesta tabela de propósito.</b><br>O aluno recebe o <b>gênero</b>, a <b>cobertura em oitavos</b> e a <b>altura da base em metros</b>. Pode haver até <b>03 camadas</b>.<br><b>Atenção:</b> algumas camadas podem estar acima da faixa de correção do exercício.</div>
+<div class="cloud-table-wrap"><table class="cloud-table"><thead><tr><th>Camada</th><th>Tipo de nuvem</th><th>Oitavos</th><th>Base</th><th>Procedimento</th></tr></thead><tbody id="cloudRows"></tbody></table></div><div id="cloudSpecial" class="cloud-special"></div></div>
+<div class="legend"><span><i class="dot blue"></i> Observação</span><span><i class="dot amber"></i> Conversão</span><span><i class="dot gray"></i> Dado auxiliar</span></div>
+</article>
+<article class="panel exercise"><div class="title blue">EXERCÍCIO — CONFECCIONE O METAR / SPECI</div>
+<div class="instruction"><b>Objetivo:</b> interpretar as condições meteorológicas, transformar as observações brutas em grupos METAR e escrever a mensagem completa na sequência correta.</div>
+<div class="report-mode"><b>TIPO DE INFORME:</b> <span id="reportMode">METAR — observação regular</span></div>
+<div class="sequence"><span>1 IDENTIFICAÇÃO</span><span>2 VENTO</span><span>3 VIS</span><span>4 TEMPO</span><span>5 NUVENS</span><span>6 T/PO</span><span>7 QNH</span></div>
+<div class="conversion-card"><div><b>Oitavos → cobertura METAR</b></div><div class="okta-rules"><span><b>1–2/8</b> → FEW</span><span><b>3–4/8</b> → SCT</span><span><b>5–7/8</b> → BKN</span><span><b>8/8</b> → OVC</span></div><div class="conversion-example">Exemplo: <b>CU 2/8 a 1.524 m</b> → 5.000 ft → <b>FEW050</b>.<br>Se fosse <b>CB 8/8 a 122 m</b> → aproximadamente 400 ft → <b>OVC004CB</b>.</div><small>ST, SC, CU, AC, AS, NS, CI e CS são apresentados para interpretação; no METAR, o gênero é explicitado como CB ou TCU quando aplicável.</small></div>
+<textarea id="answer" spellcheck="false" placeholder="Digite aqui o METAR completo..."></textarea>
+<div class="actions"><button class="primary" onclick="checkAnswer()">VERIFICAR INFORME</button><button onclick="newScenario()">NOVO METAR</button><button onclick="generateSpeci()">SIMULAR SPECI</button><button class="ghost" onclick="showAnswer()">REVELAR GABARITO</button></div>
+<div id="result" class="result hidden"></div><div id="speciInfo" class="training-note hidden"></div>
+<div class="training-note"><b>Regra de treinamento:</b> o painel apresenta a meteorologia observada. O aluno deve reconhecer oitavos, converter metros para pés, arredondar para a escala de 100 ft, selecionar as camadas reportáveis e tratar CB/TCU. Bases acima de <b>3.000 m / 9.999 ft</b> permanecem visíveis, mas não são aceitas na correção deste exercício.</div>
+</article></section>
+<section class="footer-card"><div><b>METAR Trainer — versão estática</b><p>Esta edição funciona diretamente no navegador, sem Flask ou servidor Python. Todos os cenários são gerados localmente em JavaScript. O METAR regular usa hora cheia; o SPECI usa o mesmo aeródromo e horário fora da hora cheia.</p></div><div class="status" id="status">● CENÁRIO ATIVO</div></section>
+</main>
+<script src="app.js"></script>
+</body></n</html>
