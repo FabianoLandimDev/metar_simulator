@@ -39,3 +39,10 @@ e acesse `http://127.0.0.1:8000`.
 - correção e pontuação executadas inteiramente no navegador.
 
 > Nota: esta é uma ferramenta didática. Para treinamento operacional formal, utilize sempre a documentação oficial vigente do DECEA/ICEA.
+
+
+## Ajustes pedagógicos
+- Bases de nuvens geradas em incrementos de 30 m.
+- Conversão didática: cada incremento de 30 m corresponde a 100 ft no grupo de nuvens.
+- Limite de correção das bases: até 3.000 m (referência operacional DECEA: 10.000 ft / 3.000 m).
+- QNH com decimal é aceito na correção sem arredondamento: 1017,7 hPa → Q1017.
